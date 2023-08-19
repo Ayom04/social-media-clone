@@ -4,6 +4,8 @@ const app = express();
 const PORT = process.env.PORT
 const cors = require('cors');
 
+const {notFoundMessage, welcomeMessage} = require('./constants/messages')
+
 app.use(express.json());
 app.use(cors());
 
@@ -19,6 +21,6 @@ app.listen(PORT, ()=>{
 app.use((req, res)=>{
     res.status(404).json({
         status: false,
-        message: 'What you are looking for does not seem to exist'
+        message: notFoundMessage
     })
 });
