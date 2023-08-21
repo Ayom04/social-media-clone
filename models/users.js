@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Users.hasMany(models.Post, { foreignKey: 'user_id' });
+      models.Users.hasMany(models.Posts, { foreignKey: 'user_id' });
       models.Users.hasMany(models.Comments, { foreignKey: 'user_id' });
       models.Users.hasOne(models.Reactions, { foreignKey: 'user_id' });
     }
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     email_address: DataTypes.STRING,
     phone: DataTypes.STRING,
     user_name: DataTypes.STRING,
-    gender:DataTypes.ENUM,
+    gender:DataTypes.ENUM('male', 'female', 'others'),
     date_of_birth: DataTypes.DATE,
     about_me: DataTypes.TEXT,
     occupation: DataTypes.STRING,

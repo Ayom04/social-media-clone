@@ -5,6 +5,7 @@ const hashPassword = async (password) => {
     return new Promise((resolve, reject) => {
         bcrypt.genSalt(saltRounds, (err, salt) => {
             bcrypt.hash(password, salt, (err, hash) => {
+                if (err) reject(err);
                 resolve({ hash, salt });
             });
         });
@@ -23,10 +24,11 @@ const generateOtp = (num) => {
     }
     const c = Math.pow(10, num - 1);
 
-    return Math.floor(c + Math.random() * 9 * c);
+   return Math.floor(c + Math.random() * 9 * c);
+
 };
 
-const phoneValidation = (userPhone) => {
+const phoneValidation = async(userPhone) => {
     if (!userPhone) return false;
     const phone = userPhone.trim();
     const firstChar = phone.charAt(0);
