@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Otps', {
-      sn: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         unique: true,
@@ -12,6 +12,11 @@ module.exports = {
       otp_id:{
         type: Sequelize.UUID,
         primaryKey: true,
+        allowNull: false,
+        defaultValue: Sequelize.UUIDV4
+      },
+      otp:{
+        type:Sequelize.STRING,
         allowNull: false,
       },
       email_address: {
@@ -23,7 +28,7 @@ module.exports = {
         }
       },
       otp_type: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.ENUM,
         values: ['REGISTRATION', 'FORGOT_PASSWORD'],
         allowNull: false
       },

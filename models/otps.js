@@ -14,8 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Otps.init({
+    otp_id: DataTypes.UUID,
+    otp: DataTypes.STRING,
     email_address: DataTypes.STRING,
-    otp_type: DataTypes.BOOLEAN
+    otp_type: DataTypes.ENUM('REGISTRATION', 'FORGOT_PASSWORD'),
   }, {
     sequelize,
     modelName: 'Otps',
