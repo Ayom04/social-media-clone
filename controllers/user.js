@@ -138,8 +138,12 @@ const resendOtp = async (req, res) => {
         })
     }
 }
+const updateUser = async (req, res) => {
+    
+}
 module.exports = {
     registerUser,
     verifyUser,
-    resendOtp
+    resendOtp,
+    updateUser
 }
