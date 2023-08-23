@@ -1,9 +1,11 @@
 require('dotenv').config()
 const {v4: uuidv4} = require('uuid');
 const models= require('../models')
-const { serverError,registerUserMessage ,invalidPhoneNumber,userExists,invalidOTP, 
-        otpExpired, verifyUserMessage,unauthorisedAccess,otpResentMessage} = require("../constants/messages")
-const {validateResigterUser, validateVerifyUser, validateEmail} = require('../validations/user')
+const { serverError,registerUserMessage ,invalidPhoneNumber,
+        userExists,invalidOTP,  otpExpired, verifyUserMessage,
+        unauthorisedAccess,otpResentMessage,updateUserMessage
+    } = require("../constants/messages")
+const {validateResigterUser, validateVerifyUser, validateEmail, validateUpdateUser} = require('../validations/user')
 const {phoneValidation, hashPassword, generateOtp} = require('../utils/helpers')
 const otpEnum = require('../constants/enum')
 const sendEmail = require('../services/email');
@@ -85,7 +87,7 @@ const verifyUser = async (req, res)=>{
                 email_address
             }
         })
-        sendEmail(email_address, 'Registration Successful', `Hi, We are happy to have you onboard. Let do Express our feeling with words`)
+        sendEmail(email_address, 'Registration Successful', `Hi, We are happy to have you onboard. Let's Express our feeling with words`)
         await models.Otps.destroy({
             where:{
                 email_address,
@@ -110,7 +112,6 @@ const resendOtp = async (req, res) => {
     try {
         const {error, value} = validateEmail(req.params)
         if(error != undefined)throw new Error(error.details[0].message)
-        console.log('here i am')
         const checkIfuserExists = await models.Users.findOne({
             where:{
                 email_address
@@ -139,7 +140,30 @@ const resendOtp = async (req, res) => {
     }
 }
 const updateUser = async (req, res) => {
-    
+    const {email_address} = req.params
+
+    try {
+        if(!email_address) throw new Error('Enter a valid email')
+        console.log('poiuytr')
+        const {error} = validateUpdateUser(req.body)
+        if(error != undefined)throw new Error(error.details[0].message)
+console.log('asdfghjl')
+        await models.Users.update(req.body, {
+            where: {
+                email_address
+            }
+        })
+        console.log('zxvn')
+        res.status(200).json({
+            status: true,
+            message: updateUserMessage
+        })
+    } catch (error) {
+        res.status(500).status({
+            status: false,
+            message: error.message || serverError
+        });
+    }
 }
 module.exports = {
     registerUser,

@@ -10,5 +10,6 @@ module.exports = {
     verifyUserMessage: 'User verified successfully',
     resendOtpMessage: 'Otp resent successfully',
     otpResentMessage: 'Otp resent successfully',
-    unauthorisedAccess: 'Unauthorised'
+    unauthorisedAccess: 'Unauthorised',
+    updateUserMessage: "User details updated successfully"
 }

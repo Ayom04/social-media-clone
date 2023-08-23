@@ -27,8 +27,18 @@ const validateEmail = (email_address)=>{
     const emailSchema = Joi.object({
         email_address: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
     })
-    console.log('email_address')
     return emailSchema.validate(email_address);
 }
-
-module.exports = {validateResigterUser,validateVerifyUser, validateEmail}
+const validateUpdateUser = (data) =>{
+    const updateUserSchema = Joi.object({
+        surname: Joi.string(),
+        othernames: Joi.string(),
+        phone: Joi.string(),
+        gender: Joi.string(),
+        date_of_birth: Joi.date(),
+        about_me: Joi.string(),
+        occupation: Joi.string(),
+    })
+    return updateUserSchema.validate(data)
+}
+module.exports = {validateResigterUser,validateVerifyUser, validateEmail,validateUpdateUser}
