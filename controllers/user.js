@@ -1,10 +1,16 @@
 require('dotenv').config()
 const {v4: uuidv4} = require('uuid');
+const jwt = require('jsonwebtoken')
 const models= require('../models')
-const { serverError,registerUserMessage ,invalidPhoneNumber,userExists,invalidOTP, 
-        otpExpired, verifyUserMessage,unauthorisedAccess,otpResentMessage} = require("../constants/messages")
-const {validateResigterUser, validateVerifyUser, validateEmail} = require('../validations/user')
-const {phoneValidation, hashPassword, generateOtp} = require('../utils/helpers')
+const { serverError,registerUserMessage ,invalidPhoneNumber,
+        userExists,invalidOTP,  otpExpired, verifyUserMessage,
+        unauthorisedAccess,otpResentMessage,updateUserMessage,
+        userNotFound,logInMessage,invalidCredentials, userdeleted
+    } = require("../constants/messages")
+const {validateResigterUser, validateVerifyUser, 
+        validateEmail, validateUpdateUser,validateLoginUser,} = require('../validations/user')
+const {phoneValidation, hashPassword,
+     generateOtp,comparePassword} = require('../utils/helpers')
 const otpEnum = require('../constants/enum')
 const sendEmail = require('../services/email');
 const registerUser = async(req,res) => {
@@ -50,7 +56,7 @@ const registerUser = async(req,res) => {
             otp_id: uuidv4(),
             email_address,
         })
-        sendEmail(email_address, 'OTP Verification', `Hi ${firstname}, Your OTP is ${_otp}. Kindly note that this OTP expires in an hour.`)
+        sendEmail(email_address, 'OTP Verification', `Hi ${surname}, Your OTP is ${_otp}. Kindly note that this OTP expires in an hour.`)
         res.status(200).json({
             status: true,
             message: registerUserMessage
@@ -85,7 +91,7 @@ const verifyUser = async (req, res)=>{
                 email_address
             }
         })
-        sendEmail(email_address, 'Registration Successful', `Hi, We are happy to have you onboard. Let do Express our feeling with words`)
+        sendEmail(email_address, 'Registration Successful', `Hi, We are happy to have you onboard. Let's Express our feeling with words`)
         await models.Otps.destroy({
             where:{
                 email_address,
@@ -110,7 +116,6 @@ const resendOtp = async (req, res) => {
     try {
         const {error, value} = validateEmail(req.params)
         if(error != undefined)throw new Error(error.details[0].message)
-        console.log('here i am')
         const checkIfuserExists = await models.Users.findOne({
             where:{
                 email_address
@@ -138,8 +143,73 @@ const resendOtp = async (req, res) => {
         })
     }
 }
+const updateUser = async (req, res) => {
+    const {email_address} = req.params
+
+    try {
+        if(!email_address) throw new Error('Enter a valid email')
+
+        const {error} = validateUpdateUser(req.body)
+        if(error != undefined)throw new Error(error.details[0].message)
+
+        await models.Users.update(req.body, {
+            where: {
+                email_address
+            }
+        })
+
+        res.status(200).json({
+            status: true,
+            message: updateUserMessage
+        })
+    } catch (error) {
+        res.status(500).status({
+            status: false,
+            message: error.message || serverError
+        });
+    }
+}
+const logIn = async (req, res) => {
+    const {email_address, password} = req.body
+
+    const {error} = validateLoginUser(req.body)
+    try {
+        if(error != undefined)throw new Error(error.details[0].message)
+
+        const user = await models.Users.findOne({
+            where: {
+                email_address
+            }
+        })
+        if(!user)throw new Error(userNotFound)
+        if(user.is_deleted == true)throw new Error(userdeleted)
+        const checkPasssword = await comparePassword(password, user.dataValues.password_hash)
+        if (!checkPasssword) {
+            res.status(400)
+            throw new Error(invalidCredentials);
+        }
+        const token = jwt.sign({
+            email: user.dataValues.email_address,
+            _id: uuidv4()
+        }, process.env.JWT_SECRET);
+        console.log(token)
+        res.status(200).json({
+            status: false,
+            message: logInMessage,
+            token
+        })
+    } catch (error) {
+        res.status(200).json({
+            status: true,
+            message: error.message || serverError
+        })
+    }
+}
+
 module.exports = {
     registerUser,
     verifyUser,
-    resendOtp
+    resendOtp,
+    updateUser,
+    logIn
 }
