@@ -41,4 +41,11 @@ const validateUpdateUser = (data) =>{
     })
     return updateUserSchema.validate(data)
 }
-module.exports = {validateResigterUser,validateVerifyUser, validateEmail,validateUpdateUser}
+const validateLoginUser = (data)=>{
+    const loginSchema = Joi.object({
+        email_address: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        password: Joi.string().required() 
+    })
+    return loginSchema.validate(data)
+}
+module.exports = {validateResigterUser,validateVerifyUser, validateEmail,validateUpdateUser,validateLoginUser}

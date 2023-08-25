@@ -14,9 +14,14 @@ const hashPassword = async (password) => {
 
 const comparePassword = async (password, hashPassword) => {
     return new Promise((resolve, reject) => {
-        return  bcrypt.compare(password, user.passwordHash);
+      let result = bcrypt.compare(password, hashPassword);
+      if (result) { 
+         resolve(result);
+      } else {
+        reject(err);
+      }
     });
-};
+  };
 
 const generateOtp = (num) => {
     if (num < 2) {

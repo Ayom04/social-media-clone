@@ -10,6 +10,10 @@ module.exports = {
     verifyUserMessage: 'User verified successfully',
     resendOtpMessage: 'Otp resent successfully',
     otpResentMessage: 'Otp resent successfully',
-    unauthorisedAccess: 'Unauthorised',
-    updateUserMessage: "User details updated successfully"
+    unauthorisedAccess: 'Unauthorised Access.....',
+    updateUserMessage: "User details updated successfully",
+    userNotFound: "email or password not correct",
+    logInMessage: "User logged in successfully",
+    invalidCredentials: "Invalid credentials",
+    userdeleted: "Sorry, this page isn't available"
 }
