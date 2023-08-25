@@ -15,5 +15,6 @@ module.exports = {
     userNotFound: "email or password not correct",
     logInMessage: "User logged in successfully",
     invalidCredentials: "Invalid credentials",
-    userdeleted: "Sorry, this page isn't available"
+    userdeleted: "Sorry, this page isn't available",
+    deleteUserMessage: "User deleted successfully"
 }
