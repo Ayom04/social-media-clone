@@ -11,8 +11,7 @@ const authorization = async(req,res,next)=>{
         const userData = await models.Users.findOne({where: {email_address:userEmail}})
         if(!userData) throw new Error(unauthorisedAccess)
         
-        req.params.user = userData.email_address
-        console.log(userData.dataValues) 
+        req.params.email_address = userData.email_address
         next()   
     } catch (error) {
         res.status(401).json({
