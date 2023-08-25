@@ -145,13 +145,14 @@ const resendOtp = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     const {email_address} = req.params
-
+// console.log(email_address)
     try {
         if(!email_address) throw new Error('Enter a valid email')
-
+  
         const {error} = validateUpdateUser(req.body)
+        console.log( )
         if(error != undefined)throw new Error(error.details[0].message)
-
+        console.log('qwertyu')
         await models.Users.update(req.body, {
             where: {
                 email_address
@@ -163,7 +164,7 @@ const updateUser = async (req, res) => {
             message: updateUserMessage
         })
     } catch (error) {
-        res.status(500).status({
+        res.status(500).json({
             status: false,
             message: error.message || serverError
         });

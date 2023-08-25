@@ -5,7 +5,7 @@ const authentication = require('../middleware/authentication');
 const authorization = require('../middleware/authorization');
 
 router.post('/create-user', registerUser);
-router.post('/update-user/:email_address', updateUser);
+router.post('/update-user/',authentication,authorization, updateUser);
 router.post('/login', logIn)
 router.get('/verify/:email_address/:otp', verifyUser)
 router.get('/resend-otp/:email_address', resendOtp)
