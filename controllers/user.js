@@ -5,7 +5,8 @@ const models= require('../models')
 const { serverError,registerUserMessage ,invalidPhoneNumber,
         userExists,invalidOTP,  otpExpired, verifyUserMessage,
         unauthorisedAccess,otpResentMessage,updateUserMessage,
-        userNotFound,logInMessage,invalidCredentials, userdeleted
+        userNotFound,logInMessage,invalidCredentials, userdeleted,
+        deleteUserMessage
     } = require("../constants/messages")
 const {validateResigterUser, validateVerifyUser, 
         validateEmail, validateUpdateUser,validateLoginUser,} = require('../validations/user')
@@ -206,11 +207,29 @@ const logIn = async (req, res) => {
         })
     }
 }
+const deleteUser = async (req,res)=>{
+    const {email_address} = req.params
+    try {
+        await models.Users.update({is_deleted: true}, {
+            where: {email_address: email_address}
+        })
 
+        res.status(200).json({
+            status: true,
+            message: 'User deleted successfully'
+        })
+    } catch (error) {
+        res.status(200).json({
+            status: true,
+            message: error.message || serverError
+        })
+    }
+}
 module.exports = {
     registerUser,
     verifyUser,
     resendOtp,
     updateUser,
-    logIn
+    logIn,
+    deleteUser
 }
