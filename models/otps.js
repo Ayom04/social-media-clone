@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Otps extends Model {
     /**
@@ -13,14 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Otps.init({
-    otp_id: DataTypes.UUID,
-    otp: DataTypes.STRING,
-    email_address: DataTypes.STRING,
-    otp_type: DataTypes.ENUM('REGISTRATION', 'FORGOT_PASSWORD'),
-  }, {
-    sequelize,
-    modelName: 'Otps',
-  });
+  Otps.init(
+    {
+      otp_id: DataTypes.UUID,
+      otp: DataTypes.STRING,
+      email_address: DataTypes.STRING,
+      otp_type: DataTypes.ENUM("REGISTRATION", "FORGOT_PASSWORD"),
+    },
+    {
+      sequelize,
+      modelName: "Otps",
+    }
+  );
   return Otps;
 };

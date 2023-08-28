@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Reactions extends Model {
     /**
@@ -11,18 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Reactions.belongsTo(models.Posts, { foreignKey: 'post_id' });
-      models.Reactions.belongsTo(models.Users, { foreignKey: 'user_id' });
+      models.Reactions.belongsTo(models.Posts, { foreignKey: "post_id" });
+      models.Reactions.belongsTo(models.Users, { foreignKey: "user_id" });
     }
   }
-  Reactions.init({
-    reaction_id: DataTypes.UUID,
-    post_id: DataTypes.UUID,
-    user_id: DataTypes.UUID,
-    reaction: DataTypes.ENUM('like', 'dislike', 'love', 'haha')
-  }, {
-    sequelize,
-    modelName: 'Reactions',
-  });
+  Reactions.init(
+    {
+      reaction_id: DataTypes.UUID,
+      post_id: DataTypes.UUID,
+      user_id: DataTypes.UUID,
+      reaction: DataTypes.ENUM("like", "dislike", "love", "haha"),
+    },
+    {
+      sequelize,
+      modelName: "Reactions",
+    }
+  );
   return Reactions;
 };
