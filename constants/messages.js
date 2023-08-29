@@ -28,4 +28,6 @@ module.exports = {
   commentNotFound: "Comment not found",
   editCommentMessage: "you successfully editted this comment",
   deleteCommentMessage: "you successfully deleted this comment",
+  reactToPostMessage: "You reacted to the Post successfully",
+  unreactToPostMessage: "You have reciprocated your reaction to this post",
 };
