@@ -8,6 +8,7 @@ const { notFoundMessage, welcomeMessage } = require("./constants/messages");
 const userRoute = require("./routes/user");
 const postRoute = require("./routes/post");
 const commentRoute = require("./routes/comment");
+const reactionRoute = require("./routes/reaction");
 
 app.use(express.json());
 app.use(cors());
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/posts", postRoute);
 app.use("/api/v1/comments", commentRoute);
+app.use("/api/v1/reactions", reactionRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);

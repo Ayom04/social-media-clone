@@ -9,7 +9,7 @@ const validateResigterUser = (data) => {
       .required(),
     phone: Joi.string().required(),
     user_name: Joi.string().required(),
-    gender: Joi.string().required(),
+    gender: Joi.string().required().valid("male", "female", "others"),
     date_of_birth: Joi.date().required(),
     about_me: Joi.string(),
     occupation: Joi.string(),
