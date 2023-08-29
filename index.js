@@ -7,6 +7,8 @@ const displayRoutes = require("express-routemap");
 const { notFoundMessage, welcomeMessage } = require("./constants/messages");
 const userRoute = require("./routes/user");
 const postRoute = require("./routes/post");
+const commentRoute = require("./routes/comment");
+
 app.use(express.json());
 app.use(cors());
 
@@ -16,12 +18,16 @@ app.get("/", (req, res) => {
     message: welcomeMessage,
   });
 });
+
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/posts", postRoute);
+app.use("/api/v1/comments", commentRoute);
+
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
   displayRoutes(app);
 });
+
 app.use((req, res) => {
   res.status(404).json({
     status: false,
