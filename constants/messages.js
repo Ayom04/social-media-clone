@@ -24,4 +24,8 @@ module.exports = {
     "Sorry, This service is not available. Post can not be edited an hour after creation",
   deletePostMessage: "Post deleted successfully",
   postNotFound: "Post not found",
+  commentMessage: "you successfully comment on this post",
+  commentNotFound: "Comment not found",
+  editCommentMessage: "you successfully editted this comment",
+  deleteCommentMessage: "you successfully deleted this comment",
 };

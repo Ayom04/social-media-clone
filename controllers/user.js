@@ -146,7 +146,7 @@ const verifyUser = async (req, res) => {
       message: verifyUserMessage,
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: false,
       message: error.message || serverError,
     });
@@ -181,8 +181,7 @@ const resendOtp = async (req, res) => {
       message: otpResentMessage,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
+    res.status(500).json({
       status: false,
       message: error.message || serverError,
     });
@@ -251,8 +250,8 @@ const logIn = async (req, res) => {
       token,
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    res.status(500).json({
+      status: false,
       message: error.message || serverError,
     });
   }
@@ -272,8 +271,8 @@ const deleteUser = async (req, res) => {
       message: deleteUserMessage,
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    res.status(500).json({
+      status: false,
       message: error.message || serverError,
     });
   }

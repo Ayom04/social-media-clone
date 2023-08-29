@@ -24,12 +24,12 @@ const createPost = async (req, res, next) => {
     });
 
     res.status(201).json({
-      status: false,
+      status: true,
       message: postCreateMessage,
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    res.status(500).json({
+      status: false,
       message: error.message || serverError,
     });
   }
@@ -58,8 +58,8 @@ const editPost = async (req, res) => {
       message: "Post updated successfully",
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    res.status(500).json({
+      status: false,
       message: error.message || serverError,
     });
   }
@@ -78,13 +78,13 @@ const deletePost = async (req, res) => {
       where: { post_id: post_id },
     });
 
-    res.json({
-      status: 200,
+    res.status(200).json({
+      status: true,
       message: deletePostMessage,
     });
   } catch (error) {
-    res.status(200).json({
-      status: true,
+    res.status(500).json({
+      status: false,
       message: error.message || serverError,
     });
   }
