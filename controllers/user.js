@@ -36,6 +36,7 @@ const {
 } = require("../utils/helpers");
 
 const registerUser = async (req, res) => {
+  console.log("im ready");
   const { error } = validateResigterUser(req.body);
   const {
     surname,
