@@ -194,9 +194,8 @@ const updateUser = async (req, res) => {
     if (!email_address) throw new Error("Enter a valid email");
 
     const { error } = validateUpdateUser(req.body);
-    console.log();
+
     if (error != undefined) throw new Error(error.details[0].message);
-    console.log("qwertyu");
     await models.Users.update(req.body, {
       where: {
         email_address,

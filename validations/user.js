@@ -42,8 +42,6 @@ const validateUpdateUser = (data) => {
     surname: Joi.string(),
     othernames: Joi.string(),
     phone: Joi.string(),
-    gender: Joi.string(),
-    date_of_birth: Joi.date(),
     about_me: Joi.string(),
     occupation: Joi.string(),
   });
