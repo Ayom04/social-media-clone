@@ -12,7 +12,6 @@ const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
 
 /**
- * register a new user
  * @swagger
  * /users/create-user:
  *   post:
@@ -65,7 +64,6 @@ const authorization = require("../middleware/authorization");
 router.post("/create-user", registerUser);
 
 /**
- * register a new user
  * @swagger
  * /users/login :
  *   post:
@@ -91,7 +89,6 @@ router.post("/create-user", registerUser);
 router.post("/login", logIn);
 
 /**
- * register a new user
  * @swagger
  * /users/update-user :
  *   patch:
@@ -126,7 +123,6 @@ router.post("/login", logIn);
 router.patch("/update-user", authentication, authorization, updateUser);
 
 /**
- * register a new user
  * @swagger
  * /users/delete-user :
  *   patch:
@@ -149,7 +145,6 @@ router.patch("/update-user", authentication, authorization, updateUser);
 router.patch("/delete-user", authentication, authorization, deleteUser);
 
 /**
- * register a new user
  * @swagger
  * /users/verify/{email_address}/{otp} :
  *   patch:
@@ -175,7 +170,6 @@ router.patch("/delete-user", authentication, authorization, deleteUser);
 router.patch("/verify/:email_address/:otp", verifyUser);
 
 /**
- * register a new user
  * @swagger
  * /users/resend-otp/{email_address}:
  *   post:
