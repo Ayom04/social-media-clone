@@ -14,6 +14,7 @@ const authorization = async (req, res, next) => {
 
     req.params.email_address = userData.email_address;
     req.params.user_id = userData.user_id;
+    req.params.password_hash = userData.password_hash;
     next();
   } catch (error) {
     res.status(401).json({

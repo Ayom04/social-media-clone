@@ -20,6 +20,11 @@ const {
   invalidCredentials,
   userdeleted,
   deleteUserMessage,
+  emailHasNotBeenVerified,
+  invalidPassword,
+  passwordMisamtch,
+  passwordUpdatedSuccesfully,
+  resetPasswordOtpSentSuccessfully,
 } = require("../constants/messages");
 const {
   validateResigterUser,
@@ -27,6 +32,9 @@ const {
   validateEmail,
   validateUpdateUser,
   validateLoginUser,
+  validateChangePassword,
+  validateForgetPassword,
+  validateOtpType,
 } = require("../validations/user");
 const {
   phoneValidation,
@@ -155,9 +163,11 @@ const verifyUser = async (req, res) => {
 };
 const resendOtp = async (req, res) => {
   const { email_address } = req.params;
+  const { otp_type } = req.body;
+  const { error } = validateOtpType(req.body);
   try {
-    const { error, value } = validateEmail(req.params);
     if (error != undefined) throw new Error(error.details[0].message);
+
     const checkIfuserExists = await models.Users.findOne({
       where: {
         email_address,
@@ -168,7 +178,7 @@ const resendOtp = async (req, res) => {
 
     await models.Otps.create({
       otp: _otp,
-      otp_type: otpEnum.REGISTRATION,
+      otp_type: otp_type,
       otp_id: uuidv4(),
       email_address,
     });
@@ -179,6 +189,7 @@ const resendOtp = async (req, res) => {
     );
     res.status(200).json({
       status: true,
+      otp: _otp,
       message: otpResentMessage,
     });
   } catch (error) {
@@ -227,7 +238,10 @@ const logIn = async (req, res) => {
       },
     });
     if (!user) throw new Error(userNotFound);
+
     if (user.is_deleted == true) throw new Error(userdeleted);
+
+    if (user.is_verified === false) throw new Error(emailHasNotBeenVerified);
     const checkPasssword = await comparePassword(
       password,
       user.dataValues.password_hash
@@ -277,6 +291,123 @@ const deleteUser = async (req, res) => {
     });
   }
 };
+const changePassword = async (req, res) => {
+  const { email_address, password_hash } = req.params;
+  const { newPassword, oldPassword } = req.body;
+  const { error } = validateChangePassword(req.body);
+  try {
+    if (error !== undefined) throw new Error(error.details[0].message);
+    if (newPassword === oldPassword) throw new Error(passwordMisamtch);
+
+    const checkPasssword = await comparePassword(oldPassword, password_hash);
+    if (!checkPasssword) throw new Error(invalidPassword);
+
+    if (oldPassword === newPassword) throw new Error(passwordMisamtch);
+    const { hash, salt } = await hashPassword(newPassword);
+    await models.Users.update(
+      {
+        password_hash: hash,
+        password_salt: salt,
+      },
+      {
+        where: { email_address },
+      }
+    );
+    res.status(200).json({
+      status: true,
+      message: passwordUpdatedSuccesfully,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const startForgetPassword = async (req, res) => {
+  const { email_address } = req.params;
+  const { error } = validateEmail(req.params);
+  try {
+    if (error !== undefined) throw new Error(error.details[0].message);
+    const _otp = generateOtp(6);
+
+    const user = await models.Users.findOne({
+      where: { email_address: email_address },
+    });
+    if (user.is_deleted) throw new Error(userdeleted);
+    if (!user) throw new Error(`User not found`);
+
+    await models.Otps.create({
+      otp_id: uuidv4(),
+      otp: _otp,
+      email_address: email_address,
+      otp_type: otpEnum.FORGOT_PASSWORD,
+    });
+    sendEmail(
+      email_address,
+      "Reset password",
+      `Hi ${user.surname}, Your Reset password OTP is ${_otp}. Kindly go and change your password.`
+    );
+    res.status(200).json({
+      status: true,
+      otp: _otp,
+      message: resetPasswordOtpSentSuccessfully,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const completeForgetPassword = async (req, res) => {
+  const { email_address, otp } = req.params;
+  const { newPassword } = req.body;
+  const { error } = validateForgetPassword(req.body);
+  try {
+    if (error !== undefined) throw new Error(error.details[0].message);
+    const checkOtp = await models.Otps.findOne({
+      where: {
+        email_address: email_address,
+        otp: otp,
+        otp_type: otpEnum.FORGOT_PASSWORD,
+      },
+    });
+    if (!checkOtp) throw new Error(invalidOTP);
+
+    const timeDifference = new Date() - new Date(checkOtp.createdAt);
+    const timeDifferenceInMinutes = Math.ceil(timeDifference / (1000 * 60));
+    if (timeDifferenceInMinutes > 1) throw new Error(otpExpired);
+
+    const { hash, salt } = await hashPassword(newPassword);
+    await models.Users.update(
+      {
+        password_hash: hash,
+        password_salt: salt,
+      },
+      {
+        where: { email_address },
+      }
+    );
+    await models.Otps.destroy({
+      where: {
+        email_address: email_address,
+        otp: otp,
+        otp_type: otpEnum.FORGOT_PASSWORD,
+      },
+    });
+    res.status(200).json({
+      status: true,
+      message: passwordUpdatedSuccesfully,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
 module.exports = {
   registerUser,
   verifyUser,
@@ -284,4 +415,7 @@ module.exports = {
   updateUser,
   logIn,
   deleteUser,
+  changePassword,
+  startForgetPassword,
+  completeForgetPassword,
 };

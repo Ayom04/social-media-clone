@@ -7,8 +7,9 @@ module.exports = {
   serverError: "Something went wrong",
   invalidPhoneNumber: "Please enter a valid phone number",
   invalidOTP: "Please enter a valid otp",
-  otpExpired: "Sorry, Your otp has expired",
+  otpExpired: "OTP Verification has expired, kindly request a new one",
   verifyUserMessage: "User verified successfully",
+  OtpVerificationSuccessful: "You have successfully verified your email.",
   resendOtpMessage: "Otp resent successfully",
   otpResentMessage: "Otp resent successfully",
   unauthorisedAccess: "Unauthorised Access.....",
@@ -30,4 +31,11 @@ module.exports = {
   deleteCommentMessage: "you successfully deleted this comment",
   reactToPostMessage: "You reacted to the Post successfully",
   unreactToPostMessage: "You have reciprocated your reaction to this post",
+  resetPasswordOtpSentSuccessfully:
+    "Reset Password Otp sent successfully  and it will expire in the next 5 minutes",
+  passwordUpdatedSuccesfully: "Your Password has been updated successfully",
+  emailHasNotBeenVerified: "Email Has Not Been Verified.",
+  invalidPassword: "Invalid Password",
+  passwordMisamtch:
+    "Please create a new password diffent from your old password",
 };

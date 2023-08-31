@@ -7,6 +7,9 @@ const {
   updateUser,
   logIn,
   deleteUser,
+  changePassword,
+  startForgetPassword,
+  completeForgetPassword,
 } = require("../controllers/user");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -213,6 +216,9 @@ router.patch("/verify/:email_address/:otp", verifyUser);
  *       - name: email_address
  *         in: path
  *         required: true
+ *       - name: otp_type
+ *         in: body
+ *         required: true
  *     responses:
  *        200:
  *          description: Otp succesfully sent.
@@ -227,4 +233,101 @@ router.patch("/verify/:email_address/:otp", verifyUser);
  */
 router.get("/resend-otp/:email_address", resendOtp);
 
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/change-password :
+ *   patch:
+ *     summary: changed a user's password.
+ *     description: this end point enables the user to change their password.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         in: headers
+ *         required: true
+ *       - name: newPassword
+ *         in: body
+ *         required: true
+ *       - name: repeat_newPassword
+ *         in: body
+ *         required: true
+ *       - name: oldPassword
+ *         in: body
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: Password updated successfully..
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.patch("/change-password", authentication, authorization, changePassword);
+
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/forget-password/verify/{email_address} :
+ *   get:
+ *     summary: start forget password.
+ *     description: this end point enables the user to change their password.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: A verification otp has been sent to your email.
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ */
+router.get("/forget-password/start/:email_address", startForgetPassword);
+
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/forget-password/verify/{email_address}/{otp} :
+ *   patch:
+ *     summary: complete forget password.
+ *     description: This verify the otp sent to customer on starting the forget password
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *       - name: otp
+ *         in: path
+ *         required: true
+ *       - name: newPassword
+ *         in: body
+ *         required: true
+ *       - name: repeat_newPassword
+ *         in: body
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: You can go ahead to set a new password.
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ */
+router.patch(
+  "/forget-password/verify/:email_address/:otp",
+  completeForgetPassword
+);
 module.exports = router;
