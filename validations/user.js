@@ -20,6 +20,7 @@ const validateResigterUser = (data) => {
   });
   return userSchema.validate(data);
 };
+
 const validateVerifyUser = (dada) => {
   const userVerificationSchema = Joi.object({
     email_address: Joi.string()
@@ -29,6 +30,7 @@ const validateVerifyUser = (dada) => {
   });
   return userVerificationSchema.validate(dada);
 };
+
 const validateEmail = (email_address) => {
   const emailSchema = Joi.object({
     email_address: Joi.string()
@@ -37,6 +39,7 @@ const validateEmail = (email_address) => {
   });
   return emailSchema.validate(email_address);
 };
+
 const validateUpdateUser = (data) => {
   const updateUserSchema = Joi.object({
     surname: Joi.string(),
@@ -47,6 +50,7 @@ const validateUpdateUser = (data) => {
   });
   return updateUserSchema.validate(data);
 };
+
 const validateLoginUser = (data) => {
   const loginSchema = Joi.object({
     email_address: Joi.string()
@@ -56,10 +60,42 @@ const validateLoginUser = (data) => {
   });
   return loginSchema.validate(data);
 };
+
+const validateChangePassword = (data) => {
+  const passwordSchema = Joi.object({
+    oldPassword: Joi.string()
+      .required()
+      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    newPassword: Joi.string()
+      .required()
+      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    repeat_newPassword: Joi.ref("newPassword"),
+  });
+  return passwordSchema.validate(data);
+};
+
+const validateForgetPassword = (data) => {
+  const passwordSchema = Joi.object({
+    newPassword: Joi.string()
+      .required()
+      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    repeat_newPassword: Joi.ref("newPassword"),
+  });
+  return passwordSchema.validate(data);
+};
+const validateOtpType = (data) => {
+  const otpTypeSchema = Joi.object({
+    otp_type: Joi.string().valid("FORGOT_PASSWORD", "REGISTRATION").required(),
+  });
+  return otpTypeSchema.validate(data);
+};
 module.exports = {
   validateResigterUser,
   validateVerifyUser,
   validateEmail,
   validateUpdateUser,
   validateLoginUser,
+  validateChangePassword,
+  validateForgetPassword,
+  validateOtpType,
 };

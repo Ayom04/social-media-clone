@@ -5,7 +5,7 @@ const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
 
 /**
- * register a new user
+ * creates a new post for a user
  * @swagger
  * /posts/create-post:
  *   post:
@@ -25,13 +25,19 @@ const authorization = require("../middleware/authorization");
  *     responses:
  *        200:
  *          description: Post successfully created.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.post("/create-post", authentication, authorization, createPost);
 
 /**
- * register a new user
+ * edits a user's post
  * @swagger
  * /posts/edit-post/{post_id}:
  *   post:
@@ -54,13 +60,19 @@ router.post("/create-post", authentication, authorization, createPost);
  *     responses:
  *        200:
  *          description: Post successfully editted.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.patch("/edit-post/:post_id", authentication, authorization, editPost);
 
 /**
- * register a new user
+ * deletes a user's post
  * @swagger
  * /posts/delete-post/{post_id}:
  *   delete:
@@ -80,8 +92,14 @@ router.patch("/edit-post/:post_id", authentication, authorization, editPost);
  *     responses:
  *        200:
  *          description: Post successfully deleted.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.delete(
   "/delete-post/:post_id",

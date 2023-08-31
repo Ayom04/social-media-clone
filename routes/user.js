@@ -7,11 +7,15 @@ const {
   updateUser,
   logIn,
   deleteUser,
+  changePassword,
+  startForgetPassword,
+  completeForgetPassword,
 } = require("../controllers/user");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
 
 /**
+ * creates a new user
  * @swagger
  * /users/create-user:
  *   post:
@@ -64,6 +68,7 @@ const authorization = require("../middleware/authorization");
 router.post("/create-user", registerUser);
 
 /**
+ * logs in an existing user
  * @swagger
  * /users/login :
  *   post:
@@ -83,12 +88,19 @@ router.post("/create-user", registerUser);
  *     responses:
  *        200:
  *          description: Log in successful.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.post("/login", logIn);
 
 /**
+ * update a user's details
  * @swagger
  * /users/update-user :
  *   patch:
@@ -117,12 +129,19 @@ router.post("/login", logIn);
  *     responses:
  *        200:
  *          description: User details updated Successfully.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.patch("/update-user", authentication, authorization, updateUser);
 
 /**
+ * deletes a registered user
  * @swagger
  * /users/delete-user :
  *   patch:
@@ -139,12 +158,19 @@ router.patch("/update-user", authentication, authorization, updateUser);
  *     responses:
  *        200:
  *          description: User deleted Succesfully.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.patch("/delete-user", authentication, authorization, deleteUser);
 
 /**
+ * verifies otp sent to user's email address
  * @swagger
  * /users/verify/{email_address}/{otp} :
  *   patch:
@@ -164,12 +190,19 @@ router.patch("/delete-user", authentication, authorization, deleteUser);
  *     responses:
  *        200:
  *          description: User verified successfully.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.patch("/verify/:email_address/:otp", verifyUser);
 
 /**
+ * resend otp to user's email address
  * @swagger
  * /users/resend-otp/{email_address}:
  *   post:
@@ -183,12 +216,118 @@ router.patch("/verify/:email_address/:otp", verifyUser);
  *       - name: email_address
  *         in: path
  *         required: true
+ *       - name: otp_type
+ *         in: body
+ *         required: true
  *     responses:
  *        200:
  *          description: Otp succesfully sent.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.get("/resend-otp/:email_address", resendOtp);
 
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/change-password :
+ *   patch:
+ *     summary: changed a user's password.
+ *     description: this end point enables the user to change their password.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         in: headers
+ *         required: true
+ *       - name: newPassword
+ *         in: body
+ *         required: true
+ *       - name: repeat_newPassword
+ *         in: body
+ *         required: true
+ *       - name: oldPassword
+ *         in: body
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: Password updated successfully..
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.patch("/change-password", authentication, authorization, changePassword);
+
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/forget-password/verify/{email_address} :
+ *   get:
+ *     summary: start forget password.
+ *     description: this end point enables the user to change their password.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: A verification otp has been sent to your email.
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ */
+router.get("/forget-password/start/:email_address", startForgetPassword);
+
+/**
+ * resend otp to user's email address
+ * @swagger
+ * /users/forget-password/verify/{email_address}/{otp} :
+ *   patch:
+ *     summary: complete forget password.
+ *     description: This verify the otp sent to customer on starting the forget password
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *       - name: otp
+ *         in: path
+ *         required: true
+ *       - name: newPassword
+ *         in: body
+ *         required: true
+ *       - name: repeat_newPassword
+ *         in: body
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: You can go ahead to set a new password.
+ *        422:
+ *          Bad Request
+ *        500:
+ *         description: Internal Server Error
+ */
+router.patch(
+  "/forget-password/verify/:email_address/:otp",
+  completeForgetPassword
+);
 module.exports = router;

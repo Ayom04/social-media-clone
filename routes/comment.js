@@ -9,6 +9,7 @@ const {
 } = require("../controllers/comment");
 
 /**
+ * comments to a user's post
  * @swagger
  * /comments/add-comment/{post_id}:
  *   post:
@@ -31,8 +32,14 @@ const {
  *     responses:
  *        200:
  *          description: comment successfully created.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.post(
   "/add-comment/:post_id",
@@ -42,6 +49,7 @@ router.post(
 );
 
 /**
+ * edit comment to a user's post
  * @swagger
  * /comments/edit-comment/{comment_id} :
  *   patch:
@@ -64,8 +72,14 @@ router.post(
  *     responses:
  *        200:
  *          description: comment editted successfully.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.patch(
   "/edit-comment/:comment_id",
@@ -75,6 +89,7 @@ router.patch(
 );
 
 /**
+ * delete a user's comment to a post
  * @swagger
  * /comments/delete-comment/{comment_id} :
  *   delete:
@@ -91,12 +106,17 @@ router.patch(
  *       - name: commment_id
  *         in: path
  *         required: true
-
  *     responses:
  *        200:
  *          description: comment deleted successfully.
- *        400:
+ *        422:
  *          Bad Request
+ *        404:
+ *         description: The link has expired or is invalid
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
  */
 router.delete(
   "/delete-comment/:comment_id",
