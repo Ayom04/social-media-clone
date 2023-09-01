@@ -38,4 +38,6 @@ module.exports = {
   invalidPassword: "Invalid Password",
   passwordMisamtch:
     "Please create a new password diffent from your old password",
+  getUsersMesage: "All users retrieved successfully",
+  getUserMesage: "user fetched successfully",
 };

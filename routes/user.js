@@ -10,6 +10,8 @@ const {
   changePassword,
   startForgetPassword,
   completeForgetPassword,
+  getAllUser,
+  getUserDetails,
 } = require("../controllers/user");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -330,7 +332,8 @@ router.patch(
   "/forget-password/verify/:email_address/:otp",
   completeForgetPassword
 );
-router.get("/get-user-details/:email_address");
-router.get("/get-All-details");
-router.get("/get-user");
+router.get("/get-user-details/:email_address", getUserDetails);
+router.get("/get-All-details", getAllUser);
+router.get("/get-userDetails");
+
 module.exports = router;
