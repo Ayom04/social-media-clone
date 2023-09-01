@@ -40,4 +40,5 @@ module.exports = {
     "Please create a new password diffent from your old password",
   getUsersMesage: "All users retrieved successfully",
   getUserMesage: "user fetched successfully",
+  getUserDetailsMessage: "Your details has been retrieved successfully",
 };

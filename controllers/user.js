@@ -23,10 +23,10 @@ const {
   userdeleted,
   deleteUserMessage,
   emailHasNotBeenVerified,
-  invalidPassword,
   passwordMisamtch,
   passwordUpdatedSuccesfully,
   resetPasswordOtpSentSuccessfully,
+  getUserDetailsMessage,
 } = require("../constants/messages");
 const {
   validateResigterUser,
@@ -46,7 +46,6 @@ const {
 } = require("../utils/helpers");
 
 const registerUser = async (req, res) => {
-  console.log("im ready");
   const { error } = validateResigterUser(req.body);
   const {
     surname,
@@ -425,7 +424,7 @@ const getAllUser = async (req, res) => {
     });
   }
 };
-const getUserDetails = async (req, res) => {
+const getUser = async (req, res) => {
   const { apikey } = req.headers;
   const { email_address } = req.params;
   try {
@@ -446,6 +445,35 @@ const getUserDetails = async (req, res) => {
     });
   }
 };
+const getUserDetails = async (req, res) => {
+  const { email_address } = req.params;
+  try {
+    const userInfo = await models.Users.findOne({
+      where: { email_address: email_address },
+      attributes: [
+        "surname",
+        "othernames",
+        "phone",
+        "email_address",
+        "user_name",
+        "gender",
+        "date_of_birth",
+        "occupation",
+        "createdAt",
+      ],
+    });
+    res.status(200).json({
+      status: true,
+      message: getUserDetailsMessage,
+      userInfo: userInfo,
+    });
+  } catch {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
 module.exports = {
   registerUser,
   verifyUser,
@@ -457,5 +485,6 @@ module.exports = {
   startForgetPassword,
   completeForgetPassword,
   getAllUser,
+  getUser,
   getUserDetails,
 };
