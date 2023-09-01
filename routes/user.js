@@ -330,4 +330,7 @@ router.patch(
   "/forget-password/verify/:email_address/:otp",
   completeForgetPassword
 );
+router.get("/get-user-details/:email_address");
+router.get("/get-All-details");
+router.get("/get-user");
 module.exports = router;

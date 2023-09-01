@@ -107,5 +107,6 @@ router.delete(
   authorization,
   deletePost
 );
-
+router.get("/get-post/:post_id", authorization, authorization, getPost);
+router.get("/get-full-post", fullPost);
 module.exports = router;
