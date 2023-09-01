@@ -377,7 +377,7 @@ const completeForgetPassword = async (req, res) => {
 
     const timeDifference = new Date() - new Date(checkOtp.createdAt);
     const timeDifferenceInMinutes = Math.ceil(timeDifference / (1000 * 60));
-    if (timeDifferenceInMinutes > 1) throw new Error(otpExpired);
+    if (timeDifferenceInMinutes > 5) throw new Error(otpExpired);
 
     const { hash, salt } = await hashPassword(newPassword);
     await models.Users.update(
