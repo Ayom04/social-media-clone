@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A text-based social media",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.17.1"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
