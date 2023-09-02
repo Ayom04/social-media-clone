@@ -59,7 +59,7 @@ yarn install
 yarn migrate
 ```
 
-- To seed some data into your db for testing
+- To seed some data into your database for testing
 
 ```
 yarn seed
