@@ -30,7 +30,7 @@ The databse model is availbale via the link below
 https://dbdiagram.io/d/64c790a102bd1c4a5ef9c0e8
 ```
 
-## Installation GUide
+## Installation Guide
 
 - To clone this project on your machine:
 
