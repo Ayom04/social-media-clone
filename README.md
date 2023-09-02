@@ -7,5 +7,5 @@ This is a text-based social media written with NodeJS. We focused our time and e
 This is the documenation of the code to know the endpoints to call with their respeective http method. All other necesaary details will be shared below
 
 ```
-https://api.postman.com/collections/27463356-423f6459-04e4-4e7f-b73b-6f7967731880?access_key=PMAT-01H984JMZX2B9XY0A40502AW5D
+
 ```
