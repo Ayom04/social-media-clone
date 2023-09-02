@@ -134,7 +134,6 @@ const getAllPosts = async (req, res) => {
         return { ...post.dataValues, comments, reactions };
       })
     );
-    console.log(fullPost);
     res.status(200).json({
       status: true,
       message: "All post retrieved successfully",
