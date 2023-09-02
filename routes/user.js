@@ -10,6 +10,9 @@ const {
   changePassword,
   startForgetPassword,
   completeForgetPassword,
+  getAllUser,
+  getUser,
+  getUserDetails,
 } = require("../controllers/user");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
@@ -330,4 +333,95 @@ router.patch(
   "/forget-password/verify/:email_address/:otp",
   completeForgetPassword
 );
+/**
+ * fetch a user
+ * @swagger
+ * /get-user/{email_address}:
+ *   get:
+ *     summary: fetch a  user.
+ *     description: this end point for admin to fetch a user.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: apikey
+ *         in: headers
+ *         required: true
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: User retrieved successfully.
+ *        422:
+ *          Bad Request
+ *        404:
+ *         description: User not found
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.get("/get-user/:email_address", getUser);
+/**
+ * fetch a post
+ * @swagger
+ * /get-post/{email_address}:
+ *   get:
+ *     summary: fetch a post user's post.
+ *     description: this end point for admin to fetch a post.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: apikey
+ *         in: headers
+ *         required: true
+ *       - name: email_address
+ *         in: path
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: User retrieved successfully.
+ *        422:
+ *          Bad Request
+ *        404:
+ *         description: User not found
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.get("/get-All-details", getAllUser);
+/**
+ * fetch a post
+ * @swagger
+ * /get-userDetails:
+ *   get:
+ *     summary: fetch a post user's post.
+ *     description: this end point for admin to fetch a post.
+ *     tags:
+ *       - USERS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         in: headers
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: User retrieved successfully.
+ *        422:
+ *          Bad Request
+ *        404:
+ *         description: User not found
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.get("/get-userDetails", authentication, authorization, getUserDetails);
+
 module.exports = router;

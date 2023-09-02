@@ -6,6 +6,7 @@ const {
   editPostUnavailable,
   deletePostMessage,
   postNotFound,
+  unauthorisedAccess,
 } = require("../constants/messages");
 const { validatePost } = require("../validations/post");
 const models = require("../models");
@@ -89,5 +90,62 @@ const deletePost = async (req, res) => {
     });
   }
 };
+const getPost = async (req, res) => {
+  const { apikey } = req.headers;
+  const { post_id } = req.params;
+  try {
+    if (apikey !== process.env.Apikey) throw new Error(unauthorisedAccess);
 
-module.exports = { createPost, editPost, deletePost };
+    const post = await models.Posts.findOne({
+      where: { post_id: post_id },
+    });
+    if (!post) throw new Error(postNotFound);
+    res.status(200).json({
+      status: true,
+      message: "Post retrieved successfully",
+      post: post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const getAllPosts = async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const allPosts = await models.Posts.findAll({
+      where: { user_id },
+      attributes: ["post_id", "post", "createdAt", "updatedAt"],
+    });
+    const fullPost = await Promise.all(
+      allPosts.map(async (post) => {
+        const comments = await models.Comments.findAll({
+          where: { post_id: post.dataValues.post_id },
+          attributes: ["comment_id", "comment", "createdAt", "updatedAt"],
+        });
+        const reactions = await models.Reactions.findAll({
+          where: {
+            post_id: post.dataValues.post_id,
+          },
+          attributes: ["reaction_id", "reaction", "createdAt", "updatedAt"],
+        });
+        return { ...post.dataValues, comments, reactions };
+      })
+    );
+    console.log(fullPost);
+    res.status(200).json({
+      status: true,
+      message: "All post retrieved successfully",
+      posts: fullPost,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+module.exports = { createPost, editPost, deletePost, getPost, getAllPosts };

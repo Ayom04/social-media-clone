@@ -9,8 +9,10 @@ const {
   registerUserMessage,
   invalidPhoneNumber,
   userExists,
+  getUsersMesage,
   invalidOTP,
   otpExpired,
+  getUserMesage,
   verifyUserMessage,
   unauthorisedAccess,
   otpResentMessage,
@@ -21,10 +23,10 @@ const {
   userdeleted,
   deleteUserMessage,
   emailHasNotBeenVerified,
-  invalidPassword,
   passwordMisamtch,
   passwordUpdatedSuccesfully,
   resetPasswordOtpSentSuccessfully,
+  getUserDetailsMessage,
 } = require("../constants/messages");
 const {
   validateResigterUser,
@@ -44,7 +46,6 @@ const {
 } = require("../utils/helpers");
 
 const registerUser = async (req, res) => {
-  console.log("im ready");
   const { error } = validateResigterUser(req.body);
   const {
     surname,
@@ -293,16 +294,14 @@ const deleteUser = async (req, res) => {
 };
 const changePassword = async (req, res) => {
   const { email_address, password_hash } = req.params;
-  const { newPassword, oldPassword } = req.body;
+  const { newPassword } = req.body;
   const { error } = validateChangePassword(req.body);
   try {
     if (error !== undefined) throw new Error(error.details[0].message);
-    if (newPassword === oldPassword) throw new Error(passwordMisamtch);
 
-    const checkPasssword = await comparePassword(oldPassword, password_hash);
-    if (!checkPasssword) throw new Error(invalidPassword);
+    const checkPasssword = await comparePassword(newPassword, password_hash);
+    if (checkPasssword) throw new Error(passwordMisamtch);
 
-    if (oldPassword === newPassword) throw new Error(passwordMisamtch);
     const { hash, salt } = await hashPassword(newPassword);
     await models.Users.update(
       {
@@ -401,7 +400,74 @@ const completeForgetPassword = async (req, res) => {
       message: passwordUpdatedSuccesfully,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const getAllUser = async (req, res) => {
+  const { apikey } = req.headers;
+
+  try {
+    if (apikey !== process.env.Apikey) throw new Error(unauthorisedAccess);
+    const users = await models.Users.findAll();
+    res.status(200).json({
+      status: true,
+      message: getUsersMesage,
+      users: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const getUser = async (req, res) => {
+  const { apikey } = req.headers;
+  const { email_address } = req.params;
+  try {
+    if (apikey !== process.env.Apikey) throw new Error(unauthorisedAccess);
+    const user = await models.Users.findOne({
+      where: { email_address },
+    });
+    if (!user) throw new Error(unauthorisedAccess);
+    res.status(200).json({
+      status: true,
+      message: getUserMesage,
+      user: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || serverError,
+    });
+  }
+};
+const getUserDetails = async (req, res) => {
+  const { email_address } = req.params;
+  try {
+    const userInfo = await models.Users.findOne({
+      where: { email_address: email_address },
+      attributes: [
+        "surname",
+        "othernames",
+        "phone",
+        "email_address",
+        "user_name",
+        "gender",
+        "date_of_birth",
+        "occupation",
+        "createdAt",
+      ],
+    });
+    res.status(200).json({
+      status: true,
+      message: getUserDetailsMessage,
+      userInfo: userInfo,
+    });
+  } catch {
     res.status(500).json({
       status: false,
       message: error.message || serverError,
@@ -418,4 +484,7 @@ module.exports = {
   changePassword,
   startForgetPassword,
   completeForgetPassword,
+  getAllUser,
+  getUser,
+  getUserDetails,
 };

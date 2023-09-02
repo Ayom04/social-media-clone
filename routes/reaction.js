@@ -12,7 +12,7 @@ const { react, unReact } = require("../controllers/reactions");
  *     summary: to react to a post
  *     description: this enables the users to react to a post
  *     tags:
- *       - POSTS
+ *       - REACTIONS
  *     produces:
  *       - application/json
  *     parameters:
@@ -47,7 +47,7 @@ router.post("/react/:post_id", authentication, authorization, react);
  *     summary: to react to a post
  *     description: this enables the users to react to a post
  *     tags:
- *       - POSTS
+ *       - REACTIONS
  *     produces:
  *       - application/json
  *     parameters:

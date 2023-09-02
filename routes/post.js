@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { createPost, editPost, deletePost } = require("../controllers/post");
+const {
+  createPost,
+  editPost,
+  deletePost,
+  getPost,
+  getAllPosts,
+} = require("../controllers/post");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
 
@@ -108,4 +114,64 @@ router.delete(
   deletePost
 );
 
+/**
+ * fetch a post
+ * @swagger
+ * /get-post/{post_id}:
+ *   get:
+ *     summary: fetch a post user's post.
+ *     description: this end point for admin to fetch a post.
+ *     tags:
+ *       - POSTS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: apikey
+ *         in: headers
+ *         required: true
+ *       - name: post_id
+ *         in: path
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: Post retrieved successfully.
+ *        422:
+ *          Bad Request
+ *        404:
+ *         description: Post not found
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.get("/get-post/:post_id", getPost);
+
+/**
+ * deletes a user's post
+ * @swagger
+ * /posts/get-full-postByUser:
+ *   get:
+ *     summary: fetch all user's post.
+ *     description: this end point for user to fetch their posts includng the comments and reactions.
+ *     tags:
+ *       - POSTS
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         in: headers
+ *         required: true
+ *     responses:
+ *        200:
+ *          description: Your post has been fetched succesfully
+ *        422:
+ *          Bad Request
+ *        404:
+ *         description: user haven't created any post
+ *        500:
+ *         description: Internal Server Error
+ *        401:
+ *        description: Unauthorized
+ */
+router.get("/get-full-postByUser", authentication, authorization, getAllPosts);
 module.exports = router;
