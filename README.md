@@ -51,9 +51,9 @@ cd social-media-clone
 yarn install
 ```
 
-- Create a your `.env` that contains your environment variables. Check the [.env.example file](./.env.example) to know the variables to be added.
+- Create a `.env` that contains your environment variables. Check the [.env.example file](./.env.example) to know the variables to be added.
 - update the file `config.json` with your database credentials.
-- TO migrate the models to your database:
+- To migrate the models to your database:
 
 ```
 yarn migrate
