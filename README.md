@@ -4,7 +4,7 @@ This is a text-based social media written with NodeJS. We focused our time and e
 
 ## The Team
 
-1. **Abdullah Saba** [Github](https://github.com/ayom04) / [LinkedIn](https://www.linkedin.com/in/abdullah-saba-72845a256/)
+1. **Abdullah Saba** [Github](https://github.com/ayom04) / [LinkedIn](https://www.linkedin.com/in/abdullah-saba-72845a256/) / [X](https://twitter.com/AbdullahSaba9)
 
 ## Documentation
 
