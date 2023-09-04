@@ -257,9 +257,6 @@ router.get("/resend-otp/:email_address", resendOtp);
  *       - name: repeat_newPassword
  *         in: body
  *         required: true
- *       - name: oldPassword
- *         in: body
- *         required: true
  *     responses:
  *        200:
  *          description: Password updated successfully..
