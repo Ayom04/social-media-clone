@@ -7,6 +7,7 @@ const {
   deletePostMessage,
   postNotFound,
   unauthorisedAccess,
+  getPostsMessage,
 } = require("../constants/messages");
 const { validatePost } = require("../validations/post");
 const models = require("../models");
@@ -136,7 +137,7 @@ const getAllPosts = async (req, res) => {
     );
     res.status(200).json({
       status: true,
-      message: "All post retrieved successfully",
+      message: getPostsMessage,
       posts: fullPost,
     });
   } catch (error) {

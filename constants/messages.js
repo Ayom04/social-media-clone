@@ -41,4 +41,5 @@ module.exports = {
   getUsersMesage: "All users retrieved successfully",
   getUserMesage: "user fetched successfully",
   getUserDetailsMessage: "Your details has been retrieved successfully",
+  getPostsMessage: "All posts retrieved successfully",
 };
