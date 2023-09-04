@@ -98,4 +98,4 @@ Don't forget to update the port to the value in your `.env`
 # Thanks For reading this documentation and testing it out . I hope you enjoyed the ride!
 
 <br><br>
-You can reach out to me via [email](mailto:abdullaahyomide04@gmail.com)
+You can reach out to me via [mail](mailto:abdullaahyomide04@gmail.com)
