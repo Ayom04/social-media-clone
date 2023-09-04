@@ -83,7 +83,7 @@ curl http://localhost:{PORT}/
 ```
 
 - You will get a status response
-  `{"status":false,"message":"Welcome to my API"}`
+  `{"status":true,"message":"Welcome to my API"}`
 
 ## To test the reminaing endpoints with their respective http method
 
