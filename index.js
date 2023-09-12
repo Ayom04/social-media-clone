@@ -1,20 +1,28 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3000;
+const helmet = require("helmet");
+const compression = require("compression");
 const cors = require("cors");
+const displayRoutes = require("express-routemap");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-const displayRoutes = require("express-routemap");
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
 const { notFoundMessage, welcomeMessage } = require("./constants/messages");
+
 const userRoute = require("./routes/user");
-const postRoute = require("./routes/post");
 const commentRoute = require("./routes/comment");
 const reactionRoute = require("./routes/reaction");
+const postRoute = require("./routes/post");
 
+//using body parser
 app.use(express.json());
 app.use(cors());
+app.use(compression()); // to reduce the weight of payload data
+app.use(helmet()); // set security HTTP headers
 
 app.get("/", (req, res) => {
   res.status(200).json({
