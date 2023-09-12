@@ -19,7 +19,7 @@ const createComment = async (req, res) => {
     const _post = await models.Posts.findOne({
       where: { post_id },
     });
-    console.log(_post);
+
     if (!_post) throw new Error(postNotFound);
     await models.Comments.create({
       comment_id: uuidv4(),
